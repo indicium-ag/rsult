@@ -1,24 +1,43 @@
-# Rsult: A TypeScript Library for Options and Results
+<p align="center">
+  <img src="https://github.com/indicium-ag/rsult/raw/master/rsult.svg" width="300px"/><br/>
+  <img src="https://github.com/indicium-ag/rsult/raw/master/rsult-test.svg" width="450px"/>
+</p>
 
-Rsult is a TypeScript library that provides a set of utilities for working with `Option` and `Result` types, inspired by Rust's `Option` and `Result` types. This library aims to simplify error handling and optional values in TypeScript, making it easier to write safer and more expressive code.
+<hr/>
 
-## Installation
+<h5 align="center">
+Bring the benefits of Rust's error handling and optional types to your TypeScript projects.
+<br/>
+Reduce the need for null checks and write safer, more expressive code.
+<br/>
+<br/> 
+rsult offers a collection of practical utilities for handling `Option` and `Result` types,
+<br/>
+helping you create more robust and maintainable codebases.
+</h5>
 
-To install Rsult, you can use npm or yarn:
+<hr/>
 
 ```bash
-yarn install rsult
-# or
-pnpm add rsult
+$ pnpm add rsult
 ```
-
-## Usage
-
-First, import the library into your TypeScript file:
 
 ```typescript
 import { Option, Result, Some, None, Ok, Err } from 'rsult';
 ```
+
+### tl;dr
+
+- rsult is inspired by Rust's `Option` and `Result` types.
+- It helps you handle optional values and results, eliminating `null` and `undefined` checks.
+- You can wrap values in `Some`, `None`, `Ok`, or `Err`, and use handy functions to transform, combine, and handle errors expressively.
+- It's a friendly sidekick that makes your code safer and more predictable. ✨
+
+### tl;dr
+
+rsult makes your code safer and more predictable.
+
+## Usage
 
 ### Option
 
@@ -99,13 +118,13 @@ const valueWithDefault = errResult.unwrap_or(0); // 0
 Applying multiple transformations consecutively demonstrates the power of composable operations.
 
 ```typescript
-const initialOption = Some(10);
-const complexTransform = initialOption
+const option = Some(10);
+const transform = option
   .map(x => x * 2)
-  .and_then(x => x > 15 ? Some(x.toString()) : None())
-  .unwrap_or("default");
+  .and_then(x => x > 15 ? Some(x) : None())
+  .unwrap_or(0);
 
-console.log(complexTransform); // "20"
+console.log(transform); // 20
 ```
 
 This example showcases converting a numeric option to a string if it meets a condition, providing a default otherwise.
@@ -291,4 +310,4 @@ Contributions are welcome! Please open an issue or submit a pull request.
 
 ## License
 
-Rsult is licensed under the MIT License.
+rsult is licensed under the MIT License.

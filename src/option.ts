@@ -407,8 +407,8 @@ export class OptionSome<T> implements IOption<T> {
 }
 
 export class OptionNone<T> implements IOption<T> {
-    readonly _tag: 'None' = 'None';
-    readonly _T!: T;
+    private readonly _tag: 'None' = 'None';
+    private readonly _T!: T;
 
     is_some(): this is never {
         return false;
@@ -471,7 +471,7 @@ export class OptionNone<T> implements IOption<T> {
     }
 
     unwrap_or_default() {
-        return undefined as any;
+        return null as any;
     }
 
     take(): Option<T> {

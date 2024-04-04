@@ -302,6 +302,9 @@ export interface IResultExt<T, E> extends IResultCore<T, E> {
      */
     unwrap_or_else(fn: (arg: E) => T): T;
 }
+
+type UnwrapResult<T> = T extends Result<infer U, any> ? U : T;
+
 export interface IResultIteration<T, E> extends IResultCore<T, E> {
     /**
      * Returns an iterator over the potentially contained value.
@@ -331,7 +334,7 @@ export interface IResultIteration<T, E> extends IResultCore<T, E> {
      *   console.log(await transposed); // Prints Ok(5) if the promise resolves successfully.
      * }
      */
-    transpose(): Result<T, E> | null;
+    transpose(): Result<T, E>;
 
     /**
      * Flattens a nested `Result` if the contained value is itself a `Result`.
@@ -344,7 +347,7 @@ export interface IResultIteration<T, E> extends IResultCore<T, E> {
      * const nestedErr = Ok(Err(new Error("error")));
      * const flattenedError = nestedErr.flatten(); // Results in Err(new Error("error"))
      */
-    flatten(): Result<T, E>;
+    flatten(): Result<UnwrapResult<T>, E>;
 }
 
 export interface IResult<T, E> extends
@@ -352,10 +355,18 @@ export interface IResult<T, E> extends
     IResultExt<T, E>,
     IResultIteration<T, E> {}
 
+export const isResultOk = <T, E>(val: any): val is ResultOk<T, E> => {
+    return val instanceof ResultOk;
+}
+
+export const isResultErr = <T, E>(val: any): val is ResultErr<T, E> => {
+    return val instanceof ResultErr;
+}
+
 export class ResultOk<T, E> implements IResult<T, E> {
-    readonly _tag = 'Ok' as const;
-    readonly _T!: T;
-    readonly _E!: E;
+    private readonly _tag = 'Ok' as const;
+    private readonly _T!: T;
+    private readonly _E!: E;
 
     constructor(readonly value: T) {
     }
@@ -458,15 +469,17 @@ export class ResultOk<T, E> implements IResult<T, E> {
         return this.value;
     }
 
-    transpose(): Result<T, E> | null {
+    transpose(): Result<T, E> {
         return new ResultOk<T, E>(this.value);
     }
 
-    flatten(): Result<T, E> {
+    flatten(): Result<UnwrapResult<T>, E> {
         if (this.value instanceof ResultOk || this.value instanceof ResultErr) {
             return this.value;
         } else {
-            throw new Error('Called Result.flatten() on a non-Result value');
+            // This case should not happen if T is always a Result,
+            // but it's here to satisfy TypeScript's type checker.
+            return new ResultOk<UnwrapResult<T>, E>(this.value as UnwrapResult<T>);
         }
     }
 
@@ -480,9 +493,9 @@ export class ResultOk<T, E> implements IResult<T, E> {
 }
 
 export class ResultErr<T, E> implements IResult<T, E> {
-    readonly _tag: 'Err' = 'Err';
-    readonly _T!: T;
-    readonly _E!: E;
+    private readonly _tag: 'Err' = 'Err';
+    private readonly _T!: T;
+    private readonly _E!: E;
 
     constructor(readonly value: E) {
     }
@@ -584,12 +597,12 @@ export class ResultErr<T, E> implements IResult<T, E> {
         return fn(this.value);
     }
 
-    transpose(): Result<T, E> | null {
+    transpose(): Result<T, E> {
         return new ResultErr<T, E>(this.value);
     }
 
-    flatten(): Result<T, E> {
-        return this;
+    flatten(): Result<UnwrapResult<T>, E> {
+        return this.transpose() as Result<never, E>;
     }
 
     into_ok(): T {

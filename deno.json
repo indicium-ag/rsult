@@ -1,0 +1,5 @@
+{
+    "name": "@int/rsult",
+    "version": "1.0.2",
+    "exports": "./src/lib.ts"
+}

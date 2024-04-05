@@ -1,6 +1,6 @@
 {
     "name": "rsult",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "",
     "main": "src/lib.ts",
     "repository": "https://github.com/indicium-ag/rsult",
@@ -8,8 +8,8 @@
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "keywords": [],
-    "author": "",
-    "license": "ISC",
+    "author": "Kenan Sulayman <kenan@sly.mn>",
+    "license": "MIT",
     "devDependencies": {
         "@swc/core": "^1.4.12",
         "@swc/jest": "^0.2.36",

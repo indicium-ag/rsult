@@ -452,7 +452,7 @@ describe('Result', () => {
                 const promise = Promise.reject(new Error(errorMsg));
                 const result = await result_from_promise(promise);
                 expect(result.is_err()).toBe(true);
-                expect((await result.unwrap_err()).message).toBe(errorMsg);
+                expect(result.unwrap_err().message).toBe(errorMsg);
             });
         });
     });

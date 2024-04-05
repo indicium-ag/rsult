@@ -1,4 +1,5 @@
-export type Option<T> = OptionSome<T> | OptionNone<T>;
+export type Option<T> =
+    OptionSome<T> | OptionNone<T>;
 
 export interface IOptionCheck<T> {
     /**
@@ -280,7 +281,8 @@ export interface IOption<T> extends
 
 export class OptionSome<T> implements IOption<T> {
     readonly _tag = 'Some' as const;
-    readonly _T!: T;
+    // @ts-ignore
+    readonly _T: T;
 
     constructor(readonly value: T) { }
 
@@ -408,7 +410,8 @@ export class OptionSome<T> implements IOption<T> {
 
 export class OptionNone<T> implements IOption<T> {
     private readonly _tag: 'None' = 'None';
-    private readonly _T!: T;
+    // @ts-ignore
+    private readonly _T: T;
 
     is_some(): this is never {
         return false;

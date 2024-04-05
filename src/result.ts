@@ -1,6 +1,7 @@
 import { Option, None, Some } from './option.ts';
 
-export type Result<T, E> = ResultOk<T, E> | ResultErr<T, E>;
+export type Result<T, E> =
+    ResultOk<T, E> | ResultErr<T, E>;
 
 export interface IResultCore<T, E> {
     /**
@@ -365,8 +366,10 @@ export const isResultErr = <T, E>(val: any): val is ResultErr<T, E> => {
 
 export class ResultOk<T, E> implements IResult<T, E> {
     private readonly _tag = 'Ok' as const;
-    private readonly _T!: T;
-    private readonly _E!: E;
+    // @ts-ignore
+    private readonly _T: T;
+    // @ts-ignore
+    private readonly _E: E;
 
     constructor(readonly value: T) {
     }
@@ -494,8 +497,10 @@ export class ResultOk<T, E> implements IResult<T, E> {
 
 export class ResultErr<T, E> implements IResult<T, E> {
     private readonly _tag: 'Err' = 'Err';
-    private readonly _T!: T;
-    private readonly _E!: E;
+    // @ts-ignore
+    private readonly _T: T;
+    // @ts-ignore
+    private readonly _E: E;
 
     constructor(readonly value: E) {
     }

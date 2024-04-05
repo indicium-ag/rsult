@@ -10,6 +10,7 @@
         "allowJs": false,
         "moduleResolution": "node",
         "forceConsistentCasingInFileNames": true,
+        "allowImportingTsExtensions": true,
         "noImplicitReturns": true,
         "noImplicitThis": true,
         "noImplicitAny": true,

@@ -178,7 +178,7 @@ export interface IOptionUtility<T> {
      * const myOption is None<number>();
      * const value = myOption.unwrap_or_default(); // 0
      */
-    unwrap_or_default(): T;
+    unwrap_or_default(): T | null;
 }
 
 export interface IOptionMutate<T> {
@@ -352,7 +352,7 @@ export class OptionSome<T> implements IOption<T> {
         return this.value;
     }
 
-    unwrap_or_default(): T {
+    unwrap_or_default(): T | null {
         return this.value;
     }
 
@@ -470,7 +470,7 @@ export class OptionNone<T> implements IOption<T> {
         return fn();
     }
 
-    unwrap_or_default() {
+    unwrap_or_default(): T | null {
         return null as any;
     }
 
@@ -499,11 +499,11 @@ export class OptionNone<T> implements IOption<T> {
     }
 }
 
-export const Some = <T>(val: T) => {
+export const Some = <T>(val: T): Option<T> => {
     return new OptionSome<T>(val);
 };
 
-export const None = <T>() => {
+export const None = <T>(): Option<T> => {
     return new OptionNone<T>();
 };
 

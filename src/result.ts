@@ -1,4 +1,4 @@
-import { Option, None, Some } from './option';
+import { Option, None, Some } from './option.ts';
 
 export type Result<T, E> = ResultOk<T, E> | ResultErr<T, E>;
 
@@ -613,12 +613,11 @@ export class ResultErr<T, E> implements IResult<T, E> {
         return this.value;
     }
 }
-
-export const Ok = <T, E>(val: T) => {
+export const Ok = <T, E>(val: T): Result<T, never> => {
     return new ResultOk<T, E>(val) as Result<T, never>;
 };
 
-export const Err = <T, E>(val: E) => {
+export const Err = <T, E>(val: E): Result<never, E> => {
     return new ResultErr<T, E>(val) as Result<never, E>;
 };
 

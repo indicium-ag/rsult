@@ -1,2 +1,2 @@
-export * from './result';
-export * from './option';
+export * from './result.ts';
+export * from './option.ts';

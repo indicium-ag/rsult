@@ -301,7 +301,7 @@ console.log(result); // "Parsed content: {"parsed":"Resource content"}"
 
 #### Iteration and Flattening Methods
 - `iter()`: Returns an iterator over the potentially contained value.
-- `transpose()`: Attempts to transpose a `Result` of a `Promise` into a `Promise` of a `Result`.
+- `transpose()`: Takes the value of a `Result` and returns a new instance with that value.
 - `flatten()`: Flattens a nested `Result` if the contained value is itself a `Result`.
 
 ## Contributing

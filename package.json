@@ -1,6 +1,6 @@
 {
     "name": "rsult",
-    "version": "1.0.2",
+    "version": "1.1.0",
     "description": "",
     "main": "src/lib.ts",
     "repository": "https://github.com/indicium-ag/rsult",

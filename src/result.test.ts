@@ -341,20 +341,6 @@ describe('Result', () => {
             });
         });
 
-        describe('transpose', () => {
-            it('returns ResultOk<number, _> for Result<number, _>', () => {
-                const resultPromise = Ok(5);
-                const transposed = resultPromise.transpose();
-                expect(transposed).toEqual(Ok(5));
-            });
-
-            it('returns ResultErr<_, Error> for Result<_, Error>', () => {
-                const resultPromise = Err(new Error("Error"));
-                const transposed = resultPromise.transpose();
-                expect(transposed).toEqual(Err(new Error("Error")));
-            });
-        });
-
         describe('flatten', () => {
             it('flattens nested Ok Result', () => {
                 const nestedOk = Ok(Ok(5));

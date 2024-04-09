@@ -276,6 +276,7 @@ console.log(result); // "Parsed content: {"parsed":"Resource content"}"
 #### Conversion Methods
 - `into_ok()`: Converts from `IResultCore<T, E>` to `T`.
 - `into_err()`: Converts from `IResultCore<T, E>` to `E`.
+- `transmute()`: Changes the type of `Result<T, E>` to `Result<T, never>` or `Result<never, E>`, respectively. This is particularly useful when trying to forward a `ResultErr` returned by a function whose error type overlaps with the returned error type of the current function, but whose value type does not.
 
 #### Checking and Transforming Methods
 - `is_ok_and(f: (value: T) => boolean)`: Checks if the result is Ok and the contained value passes a specified condition.
@@ -301,7 +302,6 @@ console.log(result); // "Parsed content: {"parsed":"Resource content"}"
 
 #### Iteration and Flattening Methods
 - `iter()`: Returns an iterator over the potentially contained value.
-- `transpose()`: Takes the value of a `Result` and returns a new instance with that value.
 - `flatten()`: Flattens a nested `Result` if the contained value is itself a `Result`.
 
 ## Contributing

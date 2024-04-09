@@ -121,6 +121,30 @@ export interface IResultCore<T, E> {
      * console.log(result.into_err());
      */
     into_err(): E;
+
+    /**
+     * Converts between different forms of `Result`, allowing the error type to be widened.
+     * 
+     * If called on a `ResultOk<T, E>`, it will return a `Result<T, never>`, effectively discarding 
+     * the error type. This is useful when you want to use the `Result` in a context that expects
+     * a `Result` with a specific error type, but you know that the `Result` is an `Ok` variant.
+     *
+     * If called on a `ResultErr<T, E>`, it will return a `Result<never, E>`, effectively discarding 
+     * the value type. This is useful when you want to use the `Result` in a context that expects
+     * a `Result` with a specific value type, but you know that the `Result` is an `Err` variant. 
+     * 
+     * This is particularly useful when trying to forward a ResultErr returned by a function whose
+     * error type overlaps with the returned error type of the current function, but whose value type
+     * does not.
+     *
+     * Usage Example:
+     * const result: Result<number, Error> = Ok<number, Error>(5);
+     * const transmuted: Result<number, never> = result.transmute();
+     *
+     * const result: Result<number, Error> = Err<number, Error>(new Error("Failure"));
+     * const transmuted: Result<never, Error> = result.transmute();
+     */
+    transmute(): Result<T, never> | Result<never, E>;
 }
 
 export interface IResultExt<T, E> extends IResultCore<T, E> {
@@ -325,19 +349,6 @@ export interface IResultIteration<T, E> extends IResultCore<T, E> {
     iter(): IterableIterator<T>;
 
     /**
-     * Attempts to transpose a `Result` of a `Promise` into a `Promise` of a `Result`.
-     * @returns A Promise of a Result if the inner value is a Promise, null otherwise.
-     *
-     * Usage Example:
-     * async function example() {
-     *   const resultPromise = Ok(Promise.resolve(5));
-     *   const transposed = resultPromise.transpose(); // Result<Promise<5>, E> -> Promise<Result<5, E>> | null
-     *   console.log(await transposed); // Prints Ok(5) if the promise resolves successfully.
-     * }
-     */
-    transpose(): Result<T, E>;
-
-    /**
      * Flattens a nested `Result` if the contained value is itself a `Result`.
      * @returns A single-layer `Result`, by stripping one layer of `Result` container.
      *
@@ -472,10 +483,6 @@ export class ResultOk<T, E> implements IResult<T, E> {
         return this.value;
     }
 
-    transpose(): Result<T, E> {
-        return new ResultOk<T, E>(this.value);
-    }
-
     flatten(): Result<UnwrapResult<T>, E> {
         if (this.value instanceof ResultOk || this.value instanceof ResultErr) {
             return this.value;
@@ -492,6 +499,10 @@ export class ResultOk<T, E> implements IResult<T, E> {
 
     into_err(): never {
         throw new Error('Called Result.into_err() on an Ok value: ' + this.value);
+    }
+
+    transmute(): Result<T, never> {
+        return this as any;
     }
 }
 
@@ -602,12 +613,8 @@ export class ResultErr<T, E> implements IResult<T, E> {
         return fn(this.value);
     }
 
-    transpose(): Result<T, E> {
-        return new ResultErr<T, E>(this.value);
-    }
-
     flatten(): Result<UnwrapResult<T>, E> {
-        return this.transpose() as Result<never, E>;
+        return new ResultErr(this.value) as Result<never, E>;
     }
 
     into_ok(): T {
@@ -616,6 +623,10 @@ export class ResultErr<T, E> implements IResult<T, E> {
 
     into_err(): E {
         return this.value;
+    }
+
+    transmute(): Result<never, E> {
+        return this as any;
     }
 }
 export const Ok = <T, E>(val: T): Result<T, never> => {

@@ -2,7 +2,8 @@
     "name": "rsult",
     "version": "1.2.0",
     "description": "",
-    "main": "src/lib.ts",
+    "main": "dist/lib.js",
+    "types": "dist/lib.d.ts",
     "repository": "https://github.com/indicium-ag/rsult",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"

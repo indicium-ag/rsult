@@ -1,4 +1,4 @@
-import { Option, None, Some } from './option.ts';
+import { Option, None, Some } from './option';
 
 export type Result<T, E> =
     ResultOk<T, E> | ResultErr<T, E>;

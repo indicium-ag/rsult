@@ -429,7 +429,7 @@ export class OptionNone<T> implements IOption<T> {
         throw new Error(msg);
     }
 
-    map<U>(_fn: (arg: any) => U): Option<U> {
+    map<U>(_fn: (arg: T) => U): Option<U> {
         return this as any;
     }
 
@@ -441,7 +441,7 @@ export class OptionNone<T> implements IOption<T> {
         return this as any;
     }
 
-    and_then<U>(_fn: (arg: any) => Option<U>): Option<U> {
+    and_then<U>(_fn: (arg: T) => Option<U>): Option<U> {
         return this as any;
     }
 
@@ -465,11 +465,11 @@ export class OptionNone<T> implements IOption<T> {
         throw new Error('Called Option.unwrap() on a None value');
     }
 
-    unwrap_or(optb: any): any {
+    unwrap_or(optb: T): T {
         return optb;
     }
 
-    unwrap_or_else(fn: () => any): any {
+    unwrap_or_else(fn: () => T): T {
         return fn();
     }
 

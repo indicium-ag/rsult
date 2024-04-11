@@ -1,6 +1,6 @@
 {
     "name": "rsult",
-    "version": "1.3.0",
+    "version": "1.4.0",
     "description": "",
     "main": "dist/lib.js",
     "types": "dist/lib.d.ts",
